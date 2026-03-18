@@ -1,7 +1,6 @@
-use toml_edit::{DocumentMut, Item, Table};
+use toml_edit::{DocumentMut, Item, Table, value};
 
 pub fn format(doc: &mut DocumentMut) {
-
     let package = doc.get("package").cloned();
     let dependencies = doc.get("dependencies").cloned();
 
@@ -12,9 +11,10 @@ pub fn format(doc: &mut DocumentMut) {
         }
     }
 
-    fn sort_dependencies(item: Item) -> Item {
+    let sorted_dependencies = dependencies.map(|item| {
         if let Item::Table(dep_table) = item {
-            let mut entries: Vec<(String, Item)> = dep_table.iter()
+            let mut entries: Vec<(String, Item)> = dep_table
+                .iter()
                 .map(|(k, v)| (k.to_string(), v.clone()))
                 .collect();
             entries.sort_by(|a, b| a.0.cmp(&b.0));
@@ -22,23 +22,29 @@ pub fn format(doc: &mut DocumentMut) {
             let mut new_table = Table::new();
 
             for (k, v) in entries {
-                new_table.insert(&k, v);
+                if let Some(val) = v.as_value() {
+                    if let Some(s) = val.as_str() {
+                        new_table[&k] = value(s); 
+                    } else {
+                        new_table[&k] = value(val.clone());
+                    }
+                } else {
+                    new_table[&k] = v;
+                }
             }
 
             Item::Table(new_table)
         } else {
             item
         }
-    }
-
-    let sorted_dependencies = dependencies.map(sort_dependencies);
+    });
 
     let mut new_doc = DocumentMut::new();
 
     if let Some(pkg) = package {
         new_doc["package"] = pkg;
     }
-
+    
     for (k, v) in others {
         new_doc[&k] = v;
     }
