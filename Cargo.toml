@@ -1,0 +1,9 @@
+[package]
+edition = "2024"
+name = "cargo-cargofmt-clone"
+version = "0.1.0"
+
+[dependencies]
+serde = "1.0.228"
+toml = "1.0.7"
+toml_edit = "0.25.5"
