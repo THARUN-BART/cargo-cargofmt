@@ -7,43 +7,50 @@ A CLI tool to format Cargo configuration files (`Cargo.toml`, `.cargo/config.tom
 ## 🚀 Motivation
 
 While `cargo fmt` formats Rust source code, there is no official tool to format Cargo configuration files.
-This results in inconsistent formatting, reduced readability, and unnecessary diffs in version control.
 
-**cargo-cargofmt** aims to provide a standardized formatter for TOML-based Cargo configuration files.
+This leads to:
+
+* Inconsistent formatting across projects
+* Reduced readability
+* Noisy diffs in version control
+
+**cargo-cargofmt** solves this by providing a standardized formatter for TOML-based Cargo configuration files.
 
 ---
 
 ## ✨ Features
 
-* 📦 Section ordering
+### 📦 Section Ordering
 
-  * `[package]` is placed first
-  * `[dependencies]` is placed last
+* `[package]` section is placed first
+* `[dependencies]` section is placed last
 
-* 🔤 Dependency sorting
+### 🔤 Dependency Sorting
 
-  * Dependencies are sorted alphabetically
+* Dependencies are sorted alphabetically
+* Ensures deterministic and clean ordering
 
-* 🎯 Formatting normalization
+### 🎯 Formatting Normalization
 
-  * Ensures consistent spacing (`key = value`)
-  * Converts values to standard double quotes (`" "`)
+* Consistent spacing (`key = value`)
+* Standardized double-quoted values
 
-* 🧠 Smart formatting
+### 🧠 Smart Formatting
 
-  * Built using `toml_edit`
-  * Preserves structure and supports formatting transformations
+* Built using `toml_edit`
+* Preserves structure while applying transformations
 
-* ⚡ CLI support
+### ⚡ CLI Support
 
-  * Format files directly from the terminal
+* Format files directly from terminal
+* Simple and fast execution
 
 ---
 
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/<your-username>/cargo-cargofmt.git
+git clone https://github.com/THARUN-BART/cargo-cargofmt.git
 cd cargo-cargofmt
 cargo build
 ```
@@ -106,30 +113,69 @@ cargo-cargofmt/
 ├── src/
 │   ├── main.rs        # CLI entry point
 │   ├── parser.rs      # TOML parsing logic
-│   ├── formatter.rs   # Formatting rules (ordering, sorting, normalization)
+│   ├── formatter.rs   # Formatting rules and transformations
 ```
 
 ---
 
 ## 🧠 Implementation Details
 
-* Uses `toml_edit` for parsing and editing TOML
-* Reconstructs the document to enforce consistent section ordering
-* Applies deterministic sorting for dependencies
-* Normalizes spacing and quotation styles
+* Uses `toml_edit` for parsing and modifying TOML
+* Applies deterministic formatting rules
+* Reconstructs sections for consistent ordering
+* Ensures minimal disruption to valid TOML structure
+
+---
+
+## ⚠️ Edge Cases Handled
+
+* Missing sections are handled gracefully
+* Preserves valid TOML structure
+* Avoids breaking unrelated sections
+
+---
+
+## ⚠️ Current Limitations
+
+* No support yet for:
+
+  * `[dev-dependencies]`
+  * `[build-dependencies]`
+* Limited comment preservation
+* Formatting rules are not yet configurable
 
 ---
 
 ## 🚧 Future Work
 
-* Support for:
+### Core Enhancements
 
-  * `[dev-dependencies]`
-  * `[build-dependencies]`
+* Support additional dependency sections
+* Improve comment preservation
+
+### Usability Improvements
+
 * Configurable formatting rules
-* Integration as a Cargo subcommand (`cargo cargofmt`)
-* Formatting support for `rustfmt.toml` and `clippy.toml`
-* Advanced formatting (alignment, comments preservation improvements)
+* CLI flags and options
+
+### Integration
+
+* Cargo subcommand support (`cargo cargofmt`)
+* Wider Rust ecosystem integration
+
+---
+
+## 📌 GSoC Context
+
+This project is a working prototype for improving Cargo configuration formatting as part of a Google Summer of Code proposal.
+
+It demonstrates:
+
+* TOML parsing and transformation using `toml_edit`
+* Deterministic formatting rules
+* CLI-based formatting workflow
+
+The project will be extended to include configurable formatting, broader file support, and deeper integration with Cargo.
 
 ---
 
@@ -137,12 +183,6 @@ cargo-cargofmt/
 
 Contributions are welcome!
 Feel free to open issues or submit pull requests.
-
----
-
-## 📌 GSoC Context
-
-This project is developed as a prototype for Google Summer of Code (GSoC) to improve formatting support in the Cargo ecosystem.
 
 ---
 
